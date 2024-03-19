@@ -6,7 +6,7 @@ using VampireCommandFramework;
 namespace KindredCommands.Commands;
 internal class AFKCommands
 {
-	[Command("afk", description: "AFK animation, locking WASD movement. Use again to remove.", adminOnly: false)]
+	[Command("afk", description: "AFK animation, locking WASD movement. Use again to remove.", adminOnly: true)]
 	public static void AFKCommand(ChatCommandContext ctx)
 	{
 		//"AB_Bear_FallAsleep_SleepingIdle_Buff": -883762685 - gives the ZZzzz animation and locks player in place, spells still work
