@@ -43,7 +43,7 @@ internal class GodCommands
 		ctx.Reply($"God mode added to {name}");
 	}
 
-	[Command("mortal", adminOnly: true)]
+	[Command("normal", adminOnly: true)]
 	public static void MortalCommand(ChatCommandContext ctx, OnlinePlayer player = null)
 	{
 		var charEntity = (player?.Value.CharEntity ?? ctx.Event.SenderCharacterEntity);
