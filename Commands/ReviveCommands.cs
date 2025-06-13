@@ -23,7 +23,6 @@ internal class ReviveCommands
 	[Command("revivetarget", adminOnly: true)]
 	public static void ReviveTargetCommand(ChatCommandContext ctx)
 	{
-		var userEntity = ctx.Event.SenderUserEntity;
 		var charEntity = ctx.Event.SenderCharacterEntity;
 
 		var entityInput = charEntity.Read<EntityInput>();
@@ -31,10 +30,12 @@ internal class ReviveCommands
 		{
 			if (entityInput.HoveredEntity.Has<PlayerCharacter>())
 			{
-				var name = entityInput.HoveredEntity.Read<PlayerCharacter>().Name;
+				var playerCharacter = entityInput.HoveredEntity.Read<PlayerCharacter>();
+				var name = playerCharacter.Name;
 				if (entityInput.HoveredEntity.Read<Health>().Value <= 0)
 				{
-					Helper.ReviveCharacter(entityInput.HoveredEntity, userEntity);
+
+					Helper.ReviveCharacter(entityInput.HoveredEntity, playerCharacter.UserEntity);
 					ctx.Reply($"Revived {name}");
 				}
 				else
