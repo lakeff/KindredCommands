@@ -13,8 +13,6 @@ using VampireCommandFramework;
 
 namespace KindredCommands.Services;
 
-record CommandMetadata(CommandAttribute Attribute, Assembly Assembly, MethodInfo Method, ConstructorInfo Constructor, ParameterInfo[] Parameters, Type ContextType, Type ConstructorType, CommandGroupAttribute GroupAttribute);
-
 class AuditMiddleware : CommandMiddleware
 {
 	public override void BeforeExecute(ICommandContext ctx, CommandAttribute attribute, MethodInfo method)
@@ -92,23 +90,56 @@ internal class AuditService : IDisposable
 		}
 	}
 
-	static void CanCommandExecutePostfix(ICommandContext ctx, CommandMetadata command, ref bool __result)
+	static void CanCommandExecutePostfix(ICommandContext ctx, Object command, ref bool __result)
 	{
 		// Only log rejected commands when they come from ExecuteCommandWithArgs but not help commands
 		if (__result) return;
 		if (!InExecute) return;
-		
+
 		var chatCommandContext = (ChatCommandContext)ctx;
+		string commandName;
 
-		var commandName = command.Assembly.GetName().Name;
-		if (command.GroupAttribute != null)
+		// Use reflection to access the properties of the command object regardless of its type
+		try
 		{
-			commandName += "." + command.GroupAttribute.Name;
-		}
-		commandName += "." + command.Attribute.Name;
+			// Get the Method property
+			PropertyInfo methodProp = command.GetType().GetProperty("Method");
+			if (methodProp == null) return;
 
-		Core.AuditService.LogRejectCommand(chatCommandContext.User, commandName);
+			MethodInfo methodInfo = methodProp.GetValue(command) as MethodInfo;
+			if (methodInfo == null) return;
+
+			// Start building the command name
+			commandName = methodInfo.DeclaringType.Assembly.GetName().Name;
+
+			// Get the GroupAttribute property
+			PropertyInfo groupAttributeProp = command.GetType().GetProperty("GroupAttribute");
+			if (groupAttributeProp != null)
+			{
+				var groupAttribute = groupAttributeProp.GetValue(command) as CommandGroupAttribute;
+				if (groupAttribute != null)
+				{
+					commandName += "." + groupAttribute.Name;
+				}
+			}
+
+			// Get the Attribute property
+			PropertyInfo attributeProp = command.GetType().GetProperty("Attribute");
+			if (attributeProp == null) return;
+
+			var attribute = attributeProp.GetValue(command) as CommandAttribute;
+			if (attribute == null) return;
+
+			commandName += "." + attribute.Name;
+
+			Core.AuditService.LogRejectCommand(chatCommandContext.User, commandName);
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error in CanCommandExecutePostfix: {ex.Message}");
+		}
 	}
+
 
 	static string CsvEscape(string field)
 	{
@@ -354,9 +385,7 @@ internal class AuditService : IDisposable
 		var executeCommandWithArgsMethod = AccessTools.Method(typeof(CommandRegistry), "ExecuteCommandWithArgs");
 		if (executeCommandWithArgsMethod == null)
 		{
-			// PreCommand Overloading changes in VCF
-			inExecuteCommandWithArgs = true;
-			return;
+			executeCommandWithArgsMethod = AccessTools.Method(typeof(CommandRegistry), "Handle");
 		}
 
 		var prefixExecute = new HarmonyMethod(typeof(AuditService), nameof(EnterExecuteCommandWithArgs));

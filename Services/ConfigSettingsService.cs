@@ -282,6 +282,7 @@ internal class ConfigSettingsService
 	public void ClearPrisonerFeed(int prefabGuid)
 	{
 		config.PrisonerFeeds.Remove(prefabGuid);
+		SaveConfig();
 	}
 
 	public struct PrisonerFeed

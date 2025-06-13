@@ -3,7 +3,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<AssemblyName>KindredCommands</AssemblyName>
 		<Description>Commands to expand Administration efforts and provide information</Description>
-		<Version>2.5.6</Version>
+		<Version>2.5.8</Version>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>latest</LangVersion>
 		<RootNamespace>KindredCommands</RootNamespace>
@@ -25,7 +25,7 @@
 	</ItemGroup>
 	<ItemGroup>
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="VRising.VampireCommandFramework" Version="0.9.*" />
+    <PackageReference Include="VRising.VampireCommandFramework" Version="0.10.*" />
     <PackageReference Include="System.Text.Json" Version="6.0.11" />
   </ItemGroup>
 

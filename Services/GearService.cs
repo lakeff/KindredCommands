@@ -17,7 +17,8 @@ internal class GearService
 		Prefabs.Item_MagicSource_SoulShard_Dracula,
 		Prefabs.Item_MagicSource_SoulShard_Manticore,
 		Prefabs.Item_MagicSource_SoulShard_Monster,
-		Prefabs.Item_MagicSource_SoulShard_Solarus
+		Prefabs.Item_MagicSource_SoulShard_Solarus,
+		Prefabs.Item_MagicSource_SoulShard_Morgana
 	];
 
 	public GearService()
