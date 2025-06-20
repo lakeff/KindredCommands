@@ -18,7 +18,7 @@ namespace KindredCommands.Commands;
 
 internal class CastleCommands
 {
-	[Command("claim", description: "Claims the Castle Heart you are standing next to for a specified player", adminOnly: true)]
+	[Command("claim", description: "Claima o castelo mais próximo para um player escolhido.", adminOnly: true)]
 	public static void CastleClaim(ChatCommandContext ctx, OnlinePlayer player = null)
 	{
 		Entity newOwnerUser = player?.Value.UserEntity ?? ctx.Event.SenderUserEntity;
@@ -37,109 +37,16 @@ internal class CastleCommands
 
 			var name = player?.Value.CharacterName.ToString() ?? ctx.Name;
 
-			ctx.Reply($"Assigning castle heart to {name}");
+			ctx.Reply($"Claimando o castelo para {name}");
 
 			TeamUtility.ClaimCastle(Core.EntityManager, newOwnerUser, castleHeart, limitType);
 			return;
 		}
-		ctx.Reply("Not close enough to a castle heart");
-	}
-	[Command("relocatereset", description: "clear the timer for relocation on a castle", adminOnly:true)]
-	public static void RelocateReset(ChatCommandContext ctx)
-	{
-		var castleHearts = Helper.GetEntitiesByComponentType<CastleHeart>();
-		var playerPos = ctx.Event.SenderCharacterEntity.Read<LocalToWorld>().Position;
-		foreach (var castleHeart in castleHearts)
-		{
-			var castleHeartPos = castleHeart.Read<LocalToWorld>().Position;
+		ctx.Reply("Você não está perto o suficiente de o castelo!");
 
-			if (Vector3.Distance(playerPos, castleHeartPos) > 5f)
-			{
-				continue;
-			}
-
-			var castleHeartComponent = castleHeart.Read<CastleHeart>();
-			castleHeartComponent.LastRelocationTime = double.NegativeInfinity;
-			castleHeart.Write(castleHeartComponent);
-			ctx.Reply("Relocation timer reset");
-			return;
-		}
-		ctx.Reply("Not close enough to a castle heart");
-	}
-	//folded this into playerinfo
-	/*[Command("castleinfo", "cinfo", description: "Reports information about a player's territories.", adminOnly: true)]
-	public static void CastleInfo(ChatCommandContext ctx, OnlinePlayer player)
-	{
-		var foundCastle = false;
-		ctx.Reply($"Castle Report for {player.Value.CharacterName}");
-		foreach(var castleTerritoryEntity in Helper.GetEntitiesByComponentType<CastleTerritory>())
-		{
-			var castleTerritory = castleTerritoryEntity.Read<CastleTerritory>();
-			if (castleTerritory.CastleHeart.Equals(Entity.Null)) continue;
-			
-			var userOwner = castleTerritory.CastleHeart.Read<UserOwner>();
-			if (!userOwner.Owner.GetEntityOnServer().Equals(player.Value.UserEntity)) continue;
-
-			var region = TerritoryRegions(castleTerritory);
-			var pylonstation = castleTerritory.CastleHeart.Read<Pylonstation>();
-			var time = TimeSpan.FromMinutes(pylonstation.MinutesRemaining);
-			ctx.Reply($"Castle {castleTerritory.CastleTerritoryIndex} in {region} with {time:%d}d {time:%h}h {time:%m} remaining.");
-			foundCastle = true;
-		}
-
-		if(!foundCastle)
-		{
-			ctx.Reply("No owned territories found.");
-		}
-	}*/
-	[Command("incomingdecay", "incd", description: "Reports which territories have the least time remaining", adminOnly: true)]
-	public static void PlotsDecayingNext(ChatCommandContext ctx)
-	{
-        // report a list of territories with the least time remaining
-        var castleTerritories = Helper.GetEntitiesByComponentType<CastleTerritory>();
-
-        var castleTerritoryList = new List<(Entity, CastleTerritory, double)>();
-        foreach (var castleTerritoryEntity in castleTerritories)
-        {
-            var castleTerritory = castleTerritoryEntity.Read<CastleTerritory>();
-            if (castleTerritory.CastleHeart.Equals(Entity.Null)) continue;
-			castleTerritoryList.Add((castleTerritoryEntity, castleTerritory, GetFuelTimeRemaining(castleTerritory.CastleHeart)));
-        }
-        castleTerritoryList.Sort((a, b) => a.Item3.CompareTo(b.Item3));
-        var sb = new StringBuilder();
-        foreach (var (territoryEntity, territory, secondsRemaining) in castleTerritoryList)
-        {
-            if (secondsRemaining <= 1) continue;
-			if (secondsRemaining == double.PositiveInfinity) continue;
-
-            var time = TimeSpan.FromSeconds(secondsRemaining);
-			var region = territoryEntity.Read<TerritoryWorldRegion>().Region;
-			var newLine = $"Castle {territory.CastleTerritoryIndex} in {RegionName(region)} with {time:%d}d {time:%h}h {time:%m}m remaining.";
-            if (sb.ToString().Length + newLine.Length >= Core.MAX_REPLY_LENGTH)
-            {
-                break;
-            }
-
-			sb.AppendLine(newLine);
-		}
-
-		if (sb.Length == 0)
-		{
-			sb.AppendLine("No territories with fuel remaining");
-		}
-
-        ctx.Reply(sb.ToString());
 	}
 
-	public static double GetFuelTimeRemaining(Entity castleHeart)
-	{
-		var castleHeartComponent = castleHeart.Read<CastleHeart>();
-
-		var secondsPerFuel = (8 * 60)/ Mathf.Min(Core.ServerGameSettingsSystem.Settings.CastleBloodEssenceDrainModifier, 3);
-		return (castleHeartComponent.FuelEndTime - Core.ServerTime) + secondsPerFuel * castleHeartComponent.FuelQuantity;
-	}
-
-	[Command("openplots", "op", description: "Reports all the territories with open and/or decaying plots.")]
+	[Command("spots", description: "Mostra todos spots abertos ou em decay.")]
 	public static void OpenPlots(ChatCommandContext ctx)
 	{
 		Dictionary<WorldRegionType, int> openPlots = [];
