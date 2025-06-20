@@ -42,7 +42,7 @@ internal class BuffCommands
 		var charEntity = player?.Value.CharEntity ?? ctx.Event.SenderCharacterEntity;
 
 		Buffs.AddBuff(userEntity, charEntity, buff.Prefab, duration, immortal);
-		ctx.Reply($"Applied the buff {buff.Name} to {userEntity.Read<User>().CharacterName}");
+		ctx.Reply($"Buff {buff.Name} aplicado para {userEntity.Read<User>().CharacterName}");
 	}
 
 	[Command("debuff", adminOnly: true)]
@@ -50,10 +50,10 @@ internal class BuffCommands
 	{
 		var targetEntity = (Entity)(player?.Value.CharEntity ?? ctx.Event.SenderCharacterEntity);
 		Buffs.RemoveBuff(targetEntity, buff.Prefab);
-		ctx.Reply($"Removed the buff {buff.Name} from {targetEntity.Read<PlayerCharacter>().Name}");
+		ctx.Reply($"Buff {buff.Name} removido de {targetEntity.Read<PlayerCharacter>().Name}");
 	}
 
-	[Command("listbuffs", description: "Lists the buffs a player has", adminOnly: true)]
+	[Command("listbuffs", description: "Lista os buffs de um player.", adminOnly: true)]
 	public static void ListBuffsCommand(ChatCommandContext ctx, OnlinePlayer player = null)
 	{
 		var Character = player?.Value.CharEntity ?? ctx.Event.SenderCharacterEntity;
