@@ -50,36 +50,14 @@ internal class ServantCommands
 		return closestEntity;
 	}
 
-	[Command("convert", "c", "Instantly converts a servant in a coffin", adminOnly: true)]
-	public static void ConvertServant(ChatCommandContext ctx)
-	{
-		var aimPos = ctx.Event.SenderCharacterEntity.Read<EntityAimData>().AimPosition;
-		var closest = FindClosestServantCoffin(aimPos);
-		if (closest == Entity.Null)
-		{
-			ctx.Reply("Not pointing at a servant coffin.");
-			return;
-		}
-		if (closest.Read<ServantCoffinstation>().State != ServantCoffinState.Converting)
-		{
-			ctx.Reply("Servant is not converting.");
-			return;
-		}
-		var coffin = closest.Read<ServantCoffinstation>();
-		coffin.State = ServantCoffinState.WakeUpReady;
-		closest.Write(coffin);
-
-		ctx.Reply($"Servant conversion is now finished.");
-	}
-
-	[Command("perfect", "p", "Makes the servant from the coffin perfect expertise", adminOnly: true)]
+	[Command("servo", "Faz o servo do caixão ficar perfeito.", adminOnly: false)]
 	public static void PerfectServant(ChatCommandContext ctx)
 	{
 		var aimPos = ctx.Event.SenderCharacterEntity.Read<EntityAimData>().AimPosition;
 		var closest = FindClosestServantCoffin(aimPos);
 		if (closest == Entity.Null)
 		{
-			ctx.Reply("Not pointing at a servant coffin.");
+			ctx.Reply("Não está mirando no caixão.");
 			return;
 		}
 
@@ -97,7 +75,7 @@ internal class ServantCommands
 			servant.Write(stats);
 		}
 
-		ctx.Reply($"Servant <color=white>{coffin.ServantName}</color> is now perfect.");
+		ctx.Reply($"Servo <color=white>{coffin.ServantName}</color> agora é perfeito.");
 	}
 
 	//[Command("seteyecolor", "sc", "Sets the eye color of the servant in the coffin", adminOnly: true)]
@@ -107,7 +85,7 @@ internal class ServantCommands
 		var closest = FindClosestServantCoffin(aimPos);
 		if (closest == Entity.Null)
 		{
-			ctx.Reply("Not pointing at a servant coffin.");
+			ctx.Reply("Não está mirando no caixão.");
 			return;
 		}
 		var coffin = closest.Read<ServantCoffinstation>();
