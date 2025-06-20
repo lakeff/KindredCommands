@@ -17,7 +17,7 @@ internal class ReviveCommands
 
 		Helper.ReviveCharacter(character, user);
 
-		ctx.Reply($"Revived {user.Read<User>().CharacterName}");
+		ctx.Reply($"Reviveu {user.Read<User>().CharacterName}");
 	}
 	
 	[Command("revivetarget", adminOnly: true)]
