@@ -20,14 +20,7 @@ public static class PlayerCommands
 	public static void RenameOther(ChatCommandContext ctx, FoundPlayer player, NewName newName)
 	{
 		Core.Players.RenamePlayer(player.Value.UserEntity, player.Value.CharEntity, newName.Name);
-		ctx.Reply($"Renamed {Format.B(player.Value.CharacterName.ToString())} -> {Format.B(newName.Name.ToString())}");
-	}
-
-	[Command("rename", description: "Rename yourself.", adminOnly: true)]
-	public static void RenameMe(ChatCommandContext ctx, NewName newName)
-	{
-		Core.Players.RenamePlayer(ctx.Event.SenderUserEntity, ctx.Event.SenderCharacterEntity, newName.Name);
-		ctx.Reply($"Your name has been updated to: {Format.B(newName.Name.ToString())}");
+		ctx.Reply($"Renomeou {Format.B(player.Value.CharacterName.ToString())} -> {Format.B(newName.Name.ToString())}");
 	}
 
 	public record struct NewName(FixedString64Bytes Name);
@@ -38,12 +31,12 @@ public static class PlayerCommands
 		{
 			if (!IsAlphaNumeric(input))
 			{
-				throw ctx.Error("Name must be alphanumeric.");
+				throw ctx.Error("Nome deve ser alfanumérico.");
 			}
 			var newName = new NewName(input);
 			if (newName.Name.utf8LengthInBytes > 20)
 			{
-				throw ctx.Error("Name too long.");
+				throw ctx.Error("Nome muito longo.");
 			}
 
 			var userEntities = Helper.GetEntitiesByComponentType<User>();
@@ -53,7 +46,7 @@ public static class PlayerCommands
 				var user = userEntity.Read<User>();
 				if (user.CharacterName.ToString().ToLowerInvariant().Equals(lowerName))
 				{
-					throw ctx.Error("Name already in use.");
+					throw ctx.Error("Nome já esta em uso.");
 				}
 			}
 			userEntities.Dispose();
@@ -80,27 +73,7 @@ public static class PlayerCommands
 		userEntity.Write(user);
 	}
 
-	[Command("swapplayers", description: "Switches the steamIDs of two players.", adminOnly: true)]
-	public static void SwapPlayers(ChatCommandContext ctx, FoundPlayer player1, FoundPlayer player2)
-	{
-		var userEntity1 = player1.Value.UserEntity;
-		var userEntity2 = player2.Value.UserEntity;
-		var user1 = userEntity1.Read<User>();
-		var user2 = userEntity2.Read<User>();
-
-		Helper.KickPlayer(userEntity1);
-		Helper.KickPlayer(userEntity2);
-
-		ctx.Reply($"Swapped {user1.CharacterName} with {user2.CharacterName}");
-
-		user1 = userEntity1.Read<User>();
-		user2 = userEntity2.Read<User>();
-		(user1.PlatformId, user2.PlatformId) = (user2.PlatformId, user1.PlatformId);
-		userEntity1.Write(user1);
-		userEntity2.Write(user2);
-	}
-
-	[Command("unlock", description: "Unlocks a player's skills, journal, etc.", adminOnly: true)]
+	[Command("unlock", description: "Desbloqueia TUDO para um jogador.", adminOnly: false)]
 	public static void UnlockPlayer(ChatCommandContext ctx, FoundPlayer player)
 	{
 		var User = player?.Value.UserEntity ?? ctx.Event.SenderUserEntity;
@@ -116,7 +89,7 @@ public static class PlayerCommands
 			};
 
 			UnlockPlayer(fromCharacter);
-			ctx.Reply($"Unlocked everything for {player?.Value.CharacterName ?? "you"}.");
+			ctx.Reply($"Desbloqueou tudo para {player?.Value.CharacterName ?? "you"}.");
 		}
 		catch (Exception e)
 		{
