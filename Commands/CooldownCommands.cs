@@ -33,7 +33,7 @@ public static class ResetCooldown
 		}
 
 		var name = player?.Value.CharacterName.ToString() ?? ctx.Name;
-		ctx.Reply($"Player {name}'s cooldowns have been reset.");
+		ctx.Reply($"Cooldowns resetados para {name}.");
 	}
 
 	internal static void Initialize(Entity character)
