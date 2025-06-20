@@ -8,7 +8,7 @@ namespace KindredCommands.Commands;
 
 public static class ResetCooldown
 {
-	[Command("resetcooldown", "cd", "Instantly cooldown all ability & skills for the player.", adminOnly: true)]
+	[Command("r", "Reseta todos cooldowns do jogador.", adminOnly: true)]
 	public static void ResetCooldownCommand(ChatCommandContext ctx, FoundPlayer player = null)
 	{
 		var playerCharacter = player?.Value.CharEntity ?? ctx.Event.SenderCharacterEntity;
