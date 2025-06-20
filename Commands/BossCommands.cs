@@ -103,37 +103,25 @@ internal class BossCommands
 			ctx.Reply($"{boss.Name} já está destravado!");
 	}
 
-	[Command("lockprimal", "lp", description: "Locks the specified primal boss from spawning.", adminOnly: true)]
+	[Command("lockprimal", description: "Desabiita certo boss primal de spawnar.", adminOnly: true)]
 	public static void LockPrimalBossCommand(ChatCommandContext ctx, FoundPrimal primalBoss)
 	{
 		var boss = new FoundVBlood(primalBoss.Value, "Primal "+primalBoss.Name);
 		if (Core.Boss.LockBoss(boss))
-			ctx.Reply($"Locked {boss.Name}");
+			ctx.Reply($"Travou {boss.Name}");
 		else
-			ctx.Reply($"{boss.Name} is already locked");
+			ctx.Reply($"{boss.Name} já está bloqueado!");
 	}
 
-	[Command("unlockprimal", "up", description: "Unlocks the specified primal boss allowing it to spawn.", adminOnly: true)]
+	[Command("unlockprimal", description: "Habilita certo boss primal de spawnar.", adminOnly: true)]
 	public static void UnlockPrimalBossCommand(ChatCommandContext ctx, FoundPrimal primalBoss)
 	{
 		var boss = new FoundVBlood(primalBoss.Value, "Primal " + primalBoss.Name);
 		if (Core.Boss.UnlockBoss(boss))
-			ctx.Reply($"Unlocked {boss.Name}");
+			ctx.Reply($"Habilitou o boss {boss.Name}");
 		else
-			ctx.Reply($"{boss.Name} is already unlocked");
-	}
+			ctx.Reply($"{boss.Name} já está liberado!");
 
-	[Command("list", "ls", description: "Lists all locked bosses.", adminOnly: false)]
-    public static void ListLockedBossesCommand(ChatCommandContext ctx)
-    {
-        var lockedBosses = Core.Boss.LockedBossNames;
-        if (lockedBosses.Any())
-        {
-            ctx.Reply($"Locked bosses: {string.Join(", ", lockedBosses)}");
-        }
-        else
-        {
-            ctx.Reply("No bosses are currently locked.");
         }
     }
 }
