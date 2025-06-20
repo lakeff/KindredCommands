@@ -53,9 +53,3 @@ internal class GodCommands
 		
 			}
 		}
-	}
-
-
-
-		}
-}
