@@ -38,7 +38,7 @@ internal static class SpawnCommands
 		}
 	}
 
-	[Command("spawnnpc", "spwn", description: "Spawns CHAR_ npcs", adminOnly: true)]
+	[Command("spawnnpc", description: "Spawna CHAR_ npcs", adminOnly: true)]
 	public static void SpawnNpc(ChatCommandContext ctx, CharacterUnit character, int count = 1, int level = -1)
 	{
 		if (Database.IsSpawnBanned(character.Name, out var reason))
@@ -78,7 +78,7 @@ internal static class SpawnCommands
 		ctx.Reply($"Spawning {count} {character.Name.Bold()} at your position");
 	}
 
-	[Command("customspawn", "cspwn", "customspawn <Prefab Name> [<BloodType> <BloodQuality> <Consumable(\"true/false\")> <Duration> <level>]", "Spawns a modified NPC at your current position.", adminOnly: true)]
+	[Command("customspawn", "customspawn <Prefab Name> [<BloodType> <BloodQuality> <Consumable(\"true/false\")> <Duration> <level>]", "Spawns a modified NPC at your current position.", adminOnly: true)]
 	public static void CustomSpawnNpc(ChatCommandContext ctx, CharacterUnit unit, BloodType type = BloodType.Frailed, int quality = 0, bool consumable = true, int duration = -1, int level = 0)
 	{
 		var pos = Core.EntityManager.GetComponentData<LocalToWorld>(ctx.Event.SenderCharacterEntity).Position;
@@ -161,7 +161,7 @@ internal static class SpawnCommands
 		ctx.Reply($"Spawning {unit.Name.Bold()} with {quality}% {type} blood at {x}, {z}. It is Lvl{level} and will live {(duration < 0 ? "until killed" : $"{duration} seconds")}.");
 	}
 
-	[Command("despawnnpc", "dspwn", description: "Despawns CHAR_ npcs", adminOnly: true)]
+	[Command("despawnnpc", description: "Despawns CHAR_ npcs", adminOnly: true)]
 	public static void DespawnNpc(ChatCommandContext ctx, CharacterUnit character, float radius = 25f)
 	{
 		var charEntity = ctx.Event.SenderCharacterEntity;
@@ -176,7 +176,7 @@ internal static class SpawnCommands
 		ctx.Reply($"You've killed {count} {character.Name.Bold()} at your position. You murderer!");
 	}
 
-	[Command("spawnhorse", "sh", description: "Spawns a horse", adminOnly: true)] 
+	[Command("spawnhorse", description: "Spawns a horse", adminOnly: true)] 
 	public static void SpawnHorse(ChatCommandContext ctx, float speed, float acceleration, float rotation, int num=1)
 	{
 		var pos = Core.EntityManager.GetComponentData<LocalToWorld>(ctx.Event.SenderCharacterEntity).Position;
