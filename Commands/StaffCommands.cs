@@ -13,7 +13,7 @@ namespace KindredCommands.Commands;
 
 internal class StaffCommands
 {
-	[Command("staff", description: "Shows online Staff members.", adminOnly: false)]
+	[Command("admins", description: "Mostra admins online.", adminOnly: false)]
 	public static void WhoIsOnline(ChatCommandContext ctx)
 	{
 		var users = PlayerService.GetUsersOnline();
@@ -38,10 +38,10 @@ internal class StaffCommands
 		}
 		if (builder.Length == 0)
 		{
-			ctx.Reply("There are no staff members online.");
+			ctx.Reply("Não há admins online no momento.");
 			return;
 		}
-		ctx.Reply($"Online Staff: {builder}");
+		ctx.Reply($"Admin online: {builder}");
 	}
 	[Command("reloadstaff", description: "Reloads the staff config.", adminOnly: true)]
 	public static void ReloadStaff(ChatCommandContext ctx)
