@@ -15,80 +15,17 @@ internal static class DurabilityCommands
 {
 	[CommandGroup("gear")]
 	internal class GearCommands
-	{
-		[Command("repair", "r", description: "Repairs all gear.", adminOnly: true)]
-		public static void RepairCommand(ChatCommandContext ctx, FoundPlayer player = null)
-		{
-			var targetEntity = player?.Value.CharEntity ?? ctx.Event.SenderCharacterEntity;
 
-			Helper.RepairGear(targetEntity);
-			ctx.Reply($"Gear repaired for {targetEntity.Read<PlayerCharacter>().Name}.");
-		}
-
-		[Command("break", "b", description: "Breaks all gear.", adminOnly: true)]
-		public static void BreakGearCommand(ChatCommandContext ctx, FoundPlayer player = null)
-		{
-			var targetEntity = player?.Value.CharEntity ?? ctx.Event.SenderCharacterEntity;
-			Helper.RepairGear(targetEntity, false);
-			ctx.Reply($"Gear broken for {targetEntity.Read<PlayerCharacter>().Name}.");
-		}
-
-		[Command("repairall", "ra", description: "Repairs all gear within a range.", adminOnly: true)]
-		public static void RepairAllCommand(ChatCommandContext ctx, float range = 10)
-		{
-			var senderPos = ctx.Event.SenderCharacterEntity.Read<LocalToWorld>().Position;
-			var playerEntities = Helper.GetEntitiesByComponentType<PlayerCharacter>();
-			foreach (var playerEntity in playerEntities)
-			{
-				var pos = playerEntity.Read<LocalToWorld>().Position;
-				if (Vector3.Distance(senderPos, pos) > range) continue;
-				Helper.RepairGear(playerEntity);
-			}
-
-			ctx.Reply($"Gear repaired for all players within {range}m.");
-		}
-
-		[Command("breakall", "ba", description: "Breaks all gear within a range.", adminOnly: true)]
-		public static void BreakAllCommand(ChatCommandContext ctx, float range = 10)
-		{
-			var senderPos = ctx.Event.SenderCharacterEntity.Read<LocalToWorld>().Position;
-			var playerEntities = Helper.GetEntitiesByComponentType<PlayerCharacter>();
-			foreach (var playerEntity in playerEntities)
-			{
-				var pos = playerEntity.Read<LocalToWorld>().Position;
-				if (Vector3.Distance(senderPos, pos) > range) continue;
-				Helper.RepairGear(playerEntity, false);
-			}
-
-			ctx.Reply($"Gear broken for all players within {range}m.");
-		}
-
-		[Command("headgear", "hg", description: "Toggles headgear loss on death.", adminOnly: true)]
+		[Command("headgear", description: "Desativa a perda de chapéu ao morrer.", adminOnly: true)]
 		public static void HeadgearBloodBoundCommand(ChatCommandContext ctx)
 		{
 			if(Core.GearService.ToggleHeadgearBloodbound())
 			{
-				ctx.Reply("Headgear will not be lost on death.");
+				ctx.Reply("Chapéus não irão dropar.");
 			}
 			else
 			{
-				ctx.Reply("Headgear will be lost on death.");
-			}
-		}
-
-		[Command("soulshardflight", "ssf", description: "Toggles soulshard flight restrictions.", adminOnly: true)]
-		public static void SoulshardsFlightRestrictedCommand(ChatCommandContext ctx)
-		{
-			if (Core.GearService.ToggleShardsFlightRestricted())
-			{
-				if (Core.ServerGameSettingsSystem._Settings.BatBoundShards)
-					ctx.Reply("Soulshards will not allowing flying.");
-				else
-					ctx.Reply("Current game settings have BatBoundShards set false which KindredCommands can't override");
-			}
-			else
-			{
-				ctx.Reply("Soulshards will allow flying.");
+				ctx.Reply("Chapéus irão dropar.");
 			}
 		}
 
@@ -123,7 +60,7 @@ internal static class DurabilityCommands
 			}
 		}
 
-		[Command("soulshardstatus", "sss", description: "Reports the current status of soulshards.", adminOnly: false)]
+		[Command("soulshardstatus", "sss", description: "Reports the current status of soulshards.", adminOnly: true)]
 		public static void SoulshardStatusCommand(ChatCommandContext ctx)
 		{
 			var sb = new StringBuilder();
@@ -224,7 +161,7 @@ internal static class DurabilityCommands
 		}
 
 
-		[Command("destroyallshards", description: "Destroys all soulshards in the world, containers, and inventories", adminOnly: true)]
+		[Command("destruirshards", description: "Destrói todas as shards do mapa.", adminOnly: true)]
 		public static void DestroyAllShards(ChatCommandContext ctx)
 		{
 			foreach (var shard in Helper.GetEntitiesByComponentType<Relic>())
@@ -272,31 +209,3 @@ internal static class DurabilityCommands
 				Core.Log.LogInfo($"Destroyed {count}x {guid.LookupName()}");
 			}
 		}
-		/*
-		   [Command("showhair", "sh", description: "Toggles hair visibility.")]
-		   public static void ShowHairCommand(ChatCommandContext ctx)
-		   {
-			   var charEntity = ctx.Event.SenderCharacterEntity;
-			   var equipment = charEntity.Read<Equipment>();
-
-			   if (equipment.ArmorHeadgearSlot.Equals(Entity.Null))
-			   {
-				   ctx.Reply("No headgear equipped.");
-				   return;
-			   }
-
-			   var headgear = equipment.ArmorHeadgearSlot.GetType();
-			   var equipmentToggleData = headgear.Read<EquipmentToggleData>();
-			   equipmentToggleData.HideCharacterHairOnEquip = !equipmentToggleData.HideCharacterHairOnEquip;
-			   headgear.Write(equipmentToggleData);
-
-			   ctx.Reply("Hair is " + (equipmentToggleData.HideCharacterHairOnEquip ? " hidden" : "visible") + " with current headgear");
-		   }
-
-	   */
-
-	}
-}
-
-
-
