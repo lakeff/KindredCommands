@@ -21,9 +21,9 @@ internal static class BloodCommands
 
 			if (entity == Entity.Null)
 			{
-				ctx.Reply($"Received <color=#ff0>{i}</color> Blood Merlot of <color=#ff0>{primaryType}</color> type of <color=#ff0>{primaryQuality}</color>% quality "+
-					      $"with secondary <color=#ff0>{secondaryType}</color> type of <color=#ff0>{secondaryQuality}</color>% quality and trait option {secondaryTrait}");
-				ctx.Reply($"Inventory is full, could not add the last <color=#ff0>{quantity - i}</color> Blood Merlot");
+				ctx.Reply($"Criado <color=#ff0>{i}</color> poção de sangue <color=#ff0>{primaryType}</color> de <color=#ff0>{primaryQuality}</color>% qualidade "+
+					      $"com <color=#ff0>{secondaryType}</color> de <color=#ff0>{secondaryQuality}</color>% qualidade e trait {secondaryTrait}");
+				ctx.Reply($"Inventário está cheio, não foi possivel adicionar <color=#ff0>{quantity - i}</color> poção de sangue");
 				return;
 			}
 
@@ -42,7 +42,7 @@ internal static class BloodCommands
 			Core.EntityManager.SetComponentData(entity, blood);
 		}
 
-		ctx.Reply($"Received <color=#ff0>{quantity}</color> Blood Merlot of <color=#ff0>{primaryType}</color> type of <color=#ff0>{primaryQuality}</color>% quality " +
-				  $"with secondary <color=#ff0>{secondaryType}</color> type of <color=#ff0>{secondaryQuality}</color>% quality and trait option {secondaryTrait}");
+		ctx.Reply($"Criado <color=#ff0>{quantity}</color> poção de sangue <color=#ff0>{primaryType}</color> de <color=#ff0>{primaryQuality}</color>% qualidade " +
+				  $"com <color=#ff0>{secondaryType}</color> de <color=#ff0>{secondaryQuality}</color>% qualidade e trait {secondaryTrait}");
 	}
 }
