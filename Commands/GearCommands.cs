@@ -29,7 +29,7 @@ internal static class DurabilityCommands
 			}
 		}
 
-		[Command("togglesoulsharddropmanagement", "tssdm", description: "Toggles whether KindredCommands will do soulshard drop management.", adminOnly: true)]
+		[Command("togglesoulsharddropmanagement", description: "Toggles whether KindredCommands will do soulshard drop management.", adminOnly: true)]
 		public static void ToggleSoulshardDropManagementCommand(ChatCommandContext ctx)
 		{
 			if (Core.SoulshardService.ToggleShardDropManagement())
@@ -42,7 +42,7 @@ internal static class DurabilityCommands
 			}
 		}
 
-		[Command("soulshardlimit", "ssl", description: "How many soulshards can be dropped before a boss won't drop a new one if the relic Unique setting is active.", adminOnly: true)]
+		[Command("soulshardlimit", description: "How many soulshards can be dropped before a boss won't drop a new one if the relic Unique setting is active.", adminOnly: true)]
 		public static void SoulshardLimitCommand(ChatCommandContext ctx, int limit, RelicType shardType=RelicType.None)
 		{
 			if (limit < 0)
@@ -60,7 +60,7 @@ internal static class DurabilityCommands
 			}
 		}
 
-		[Command("soulshardstatus", "sss", description: "Reports the current status of soulshards.", adminOnly: true)]
+		[Command("soulshardstatus", description: "Reports the current status of soulshards.", adminOnly: true)]
 		public static void SoulshardStatusCommand(ChatCommandContext ctx)
 		{
 			var sb = new StringBuilder();
@@ -102,7 +102,7 @@ internal static class DurabilityCommands
 			ctx.Reply(sb.ToString());
 		}
 
-		[Command("soulsharddurability", "ssd", description: "Sets the durability on all soulshards in the player's inventory to a specified amount", adminOnly: true)]
+		[Command("soulsharddurability", description: "Sets the durability on all soulshards in the player's inventory to a specified amount", adminOnly: true)]
 		public static void ShardDurabilityCommand(ChatCommandContext ctx, float durability, FoundPlayer player = null)
 		{
 			var charEntity = player?.Value.CharEntity ?? ctx.Event.SenderCharacterEntity;
@@ -142,7 +142,7 @@ internal static class DurabilityCommands
 				ctx.Reply($"No soulshards found in <color=yellow>{playerName}</color>'s inventory.");
 		}
 
-		[Command("soulsharddurabilitytime", "ssdt", description: "How many seconds will soulshards last before they break", adminOnly: true)]
+		[Command("soulsharddurabilitytime", description: "How many seconds will soulshards last before they break", adminOnly: true)]
 		public static void ShardDurabilityTimeCommand(ChatCommandContext ctx, int? seconds=null)
 		{
 			if (seconds.HasValue && seconds < 0)
