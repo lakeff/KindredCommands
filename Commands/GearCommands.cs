@@ -209,3 +209,5 @@ internal static class DurabilityCommands
 				Core.Log.LogInfo($"Destroyed {count}x {guid.LookupName()}");
 			}
 		}
+	}
+}
